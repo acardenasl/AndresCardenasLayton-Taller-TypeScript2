@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Series Table</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card {
+      width: 18rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Series Table</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Channel</th>
+              <th scope="col">Seasons</th>
+            </tr>
+          </thead>
+          <tbody id="series-table-body"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3"></td>
+              <td id="average-seasons"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="col-md-6" id="serie-details"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript files -->
+  <script src="./serie.js"></script>
+  <script src="./data.js"></script>
+
+  <script>
+    // Loop through the series array and populate the table
+    const seriesTableBody = document.getElementById('series-table-body');
+    let totalSeasons = 0;
+    series.forEach(serie => {
+      totalSeasons += serie.seasons;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <th scope="row">${serie.id}</th>
+        <td>${serie.name}</td>
+        <td>${serie.channel}</td>
+        <td>${serie.seasons}</td>
+      `;
+      row.addEventListener('click', () => {
+        showSerieDetails(serie);
+      });
+      seriesTableBody.appendChild(row);
+    });
+
+    // Calculate and display the average seasons
+    const averageSeasons = totalSeasons / series.length;
+    const averageSeasonsCell = document.getElementById('average-seasons');
+    averageSeasonsCell.textContent = `Average Seasons: ${averageSeasons.toFixed(2)}`;
+
+    // Function to show serie details
+    function showSerieDetails(serie) {
+      const serieDetailsContainer = document.getElementById('serie-details');
+      serieDetailsContainer.innerHTML = `
+        <div class="card">
+          <img src="${serie.imageUrl}" class="card-img-top" alt="${serie.name}">
+          <div class="card-body">
+            <h5 class="card-title">${serie.name}</h5>
+            <p class="card-text">${serie.description}</p>
+            <a href="${serie.website}" class="btn btn-primary">Go to Website</a>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
